@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>For Isha ❤️</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+<style>
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+body {
+  font-family: "Segoe UI", sans-serif;
+  color: white;
+  overflow: hidden;
+}
+
+/* ---------------- BACKGROUND SLIDESHOW ---------------- */
+
+#bg-slideshow {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background: radial-gradient(circle at top, #1b1b3a, #000);
+  overflow: hidden;
+}
+
+.bg-layer {
+  position: absolute;
+  inset: 0;
+
+  /* FULL IMAGE – NO CROP */
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+
+  opacity: 0;
+  transition: opacity 2.5s ease-in-out;
+}
+
+/* Blurred fill behind full image (hybrid look) */
+.bg-layer::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: inherit;
+  background-size: cover;
+  background-position: center;
+  filter: blur(30px) brightness(0.4);
+  z-index: -1;
+}
+
+.bg-layer.active {
+  opacity: 1;
+}
+
+/* Optional cinematic overlay */
+#bg-slideshow::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at top,
+    rgba(0,0,0,0.25),
+    rgba(0,0,0,0.85)
+  );
+}
+
+/* ---------------- CAROUSEL ---------------- */
+
+.carousel,
+.carousel-inner,
+.carousel-item {
+  height: 100vh;
+}
+
+.carousel {
+  position: relative;
+  z-index: 2;
+}
+
+.page {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 24px;
+}
+
+.number {
+  font-size: 64px;
+  opacity: 0.35;
+  margin-bottom: 10px;
+}
+
+.text {
+  font-size: 26px;
+  max-width: 720px;
+  min-height: 70px;
+}
+
+.heart {
+  font-size: 42px;
+  margin-top: 20px;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+/* ---------------- FLOATING HEARTS & STARS ---------------- */
+
+.floating {
+  position: fixed;
+  z-index: 1;
+  animation: floatUp linear infinite;
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+@keyframes floatUp {
+  from {
+    transform: translateY(110vh) scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(-20vh) scale(1.2);
+    opacity: 1;
+  }
+}
+
+/* ---------------- FINAL SLIDE ---------------- */
+
+.final {
+  font-size: 36px;
+}
+
+.btn-love {
+  margin-top: 30px;
+  font-size: 20px;
+  padding: 12px 32px;
+  border-radius: 30px;
+  animation: glowBtn 2s infinite;
+}
+
+@keyframes glowBtn {
+  0% { box-shadow: 0 0 5px #ff4d6d; }
+  50% { box-shadow: 0 0 25px #ff4d6d; }
+  100% { box-shadow: 0 0 5px #ff4d6d; }
+}
+
+.btn-no {
+  position: absolute;
+  margin-top: 15px;
+}
+
+/* ---------------- CONFETTI ---------------- */
+
+.confetti {
+  position: fixed;
+  top: -10px;
+  width: 10px;
+  height: 10px;
+  opacity: 0.9;
+  z-index: 9999;
+  animation: confettiFall linear forwards;
+}
+
+@keyframes confettiFall {
+  to {
+    transform: translateY(110vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- BACKGROUND SLIDESHOW -->
+<div id="bg-slideshow">
+  <div class="bg-layer active"></div>
+  <div class="bg-layer"></div>
+</div>
+
+<!-- CAROUSEL -->
+<div id="loveCarousel" class="carousel slide">
+  <div class="carousel-inner" id="carouselInner"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+/* ---------------- SLIDES CONTENT ---------------- */
+
+const reasons = [
+  "I love how you make everything feel lighter.",
+  "I love the way you care, even when you pretend you don’t.",
+  "I love how strong you are, especially on hard days.",
+  "I love your awkward smile.",
+  "I love how deeply you feel things.",
+  "I love how you challenge me to be better.",
+  "I love how bright you are during the darkest days.",
+  "I love how safe you make me feel.",
+  "I love how thoughtful you are.",
+  "I love the little things you do that no one notices.",
+  "I love how passionate you are about what matters to you.",
+  "I love how you make distance feel smaller.",
+  "I love how you feel like home.",
+  "I love you. Always."
+];
+
+const carouselInner = document.getElementById("carouselInner");
+
+/* Create slides */
+reasons.forEach((text, i) => {
+  const slide = document.createElement("div");
+  slide.className = "carousel-item" + (i === 0 ? " active" : "");
+  slide.innerHTML = `
+    <div class="page">
+      <div class="number">${i + 1}</div>
+      <div class="text" data-full="${text}"></div>
+      <div class="heart">❤️</div>
+    </div>
+  `;
+  carouselInner.appendChild(slide);
+});
+
+/* Final slide */
+const finalSlide = document.createElement("div");
+finalSlide.className = "carousel-item";
+finalSlide.innerHTML = `
+  <div class="page">
+    <div class="final">Isha…</div>
+    <div class="final mt-3">Will you be my Valentine? ❤️</div>
+    <button class="btn btn-danger btn-love mt-4" onclick="celebrate()">Yes</button>
+    <button class="btn btn-outline-light btn-no">No</button>
+  </div>
+`;
+carouselInner.appendChild(finalSlide);
+
+/* Init carousel */
+const carouselEl = document.getElementById("loveCarousel");
+const carousel = new bootstrap.Carousel(carouselEl, {
+  interval: false,
+  touch: true,
+  wrap: false
+});
+
+/* ---------------- TYPEWRITER ---------------- */
+
+function typeText(el) {
+  if (!el || el.dataset.done) return;
+  el.dataset.done = "true";
+  const text = el.dataset.full;
+  let i = 0;
+  const interval = setInterval(() => {
+    el.textContent += text[i];
+    i++;
+    if (i >= text.length) clearInterval(interval);
+  }, 40);
+}
+
+typeText(document.querySelector(".carousel-item.active .text"));
+
+carouselEl.addEventListener("slid.bs.carousel", () => {
+  typeText(document.querySelector(".carousel-item.active .text"));
+});
+
+/* Click anywhere to advance */
+carouselEl.addEventListener("click", () => carousel.next());
+
+/* ---------------- RUNAWAY NO BUTTON ---------------- */
+
+document.addEventListener("mouseover", e => {
+  if (e.target.classList.contains("btn-no")) {
+    e.target.style.left = Math.random() * 60 + "%";
+    e.target.style.top = Math.random() * 60 + "%";
+  }
+});
+
+/* ---------------- FLOATING HEARTS & STARS ---------------- */
+
+setInterval(() => {
+  for (let i = 0; i < 4; i++) {
+    const el = document.createElement("div");
+    el.className = "floating";
+    el.innerHTML = Math.random() > 0.5 ? "❤️" : "✨";
+    el.style.left = Math.random() * 100 + "vw";
+    el.style.fontSize = Math.random() * 20 + 14 + "px";
+    el.style.animationDuration = Math.random() * 4 + 6 + "s";
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 10000);
+  }
+}, 600);
+
+/* ---------------- CONFETTI ---------------- */
+
+function celebrate() {
+  for (let i = 0; i < 90; i++) {
+    const c = document.createElement("div");
+    c.className = "confetti";
+    c.style.left = Math.random() * 100 + "vw";
+    c.style.backgroundColor =
+      ["#ff4d6d", "#ffd166", "#6ec1e4", "#c77dff"][Math.floor(Math.random() * 4)];
+    c.style.animationDuration = Math.random() * 2 + 2 + "s";
+    c.style.width = c.style.height = Math.random() * 8 + 6 + "px";
+    document.body.appendChild(c);
+    setTimeout(() => c.remove(), 4000);
+  }
+}
+
+/* ---------------- BACKGROUND SLIDESHOW ---------------- */
+
+const photos = [
+  "Photos/Photos-3-001/1.jpg",
+  "Photos/Photos-3-001/2.jpg",
+  "Photos/Photos-3-001/3.jpg",
+  "Photos/Photos-3-001/4.jpg",
+  "Photos/Photos-3-001/5.jpg",
+  "Photos/Photos-3-001/6.jpg"
+];
+
+const layers = document.querySelectorAll(".bg-layer");
+let current = 0;
+let showing = 0;
+
+// preload
+photos.forEach(src => {
+  const img = new Image();
+  img.src = src;
+});
+
+// initial
+layers[0].style.backgroundImage = `url(${photos[0]})`;
+layers[0].classList.add("active");
+
+setInterval(() => {
+  const next = (current + 1) % photos.length;
+  const nextLayer = layers[1 - showing];
+  const currentLayer = layers[showing];
+
+  nextLayer.style.backgroundImage = `url(${photos[next]})`;
+  nextLayer.classList.add("active");
+  currentLayer.classList.remove("active");
+
+  showing = 1 - showing;
+  current = next;
+}, 8000);
+</script>
+
+</body>
+</html>
